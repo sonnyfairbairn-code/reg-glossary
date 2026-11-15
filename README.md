@@ -49,6 +49,18 @@ Open http://localhost:3000.
 npm test
 ```
 
+## Deploy to GitHub Pages
+
+GitHub Pages hosts static files only, so the site also ships as a backend-free copy in `docs/`.
+In that copy the browser loads `docs/data.json` and runs the same search, filters and Anki export itself.
+
+```bash
+npm run build:static
+```
+
+Run this after any change to the terms or frontend, then commit `docs/`.
+In the repo on GitHub: Settings → Pages → Deploy from a branch → `main` and `/docs`.
+
 ## API
 
 | Endpoint | Purpose |
@@ -67,8 +79,10 @@ server/
   db.js           SQLite schema and seeding
   romaji.js       Kana to romaji converter (enables romaji search)
   app.js          Express API
+  build-static.js Builds docs/ for GitHub Pages
   api.test.js     Tests
-public/           Frontend
+public/           Frontend (source)
+docs/             Static build of the frontend plus data.json (generated)
 ```
 
 ## Add a term

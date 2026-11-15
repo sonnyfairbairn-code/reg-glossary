@@ -4,6 +4,68 @@ const PAGE = 20;
 const state = { q: '', level: '', cat: '', lang: 'ja', offset: 0, total: 0 };
 let meta = { languages: [], levels: [], categories: [], total: 0 };
 let requestId = 0;
+let local = null; // set to the bundled dataset when no backend is available (static hosting)
+
+async function getJson(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || res.statusText);
+  return res.json();
+}
+
+// ── Static mode: the same search, ranking and export as the API, run in the browser ──
+const toHiragana = (s) => s.replace(/[\u30a1-\u30f6]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0x60));
+
+function localFilter(p) {
+  const q = (p.get('q') || '').trim().toLowerCase();
+  const kana = toHiragana(q);
+  const level = p.get('level');
+  const cat = p.get('category');
+  const rows = (local.terms[p.get('lang')] || []).filter(
+    (t) => (!level || String(t.level) === level) && (!cat || t.category === cat)
+  );
+  if (!q) return rows;
+  const has = (s) => s.toLowerCase().includes(q);
+  return rows
+    .map((t) => {
+      const readingH = toHiragana(t.reading);
+      const nameHit = has(t.en) || has(t.term);
+      if (!(nameHit || has(t.abbr) || has(t.definition) || has(t.alt) || readingH.includes(kana) || t.romaji.includes(q))) return null;
+      let rank = 2;
+      if ([t.en, t.abbr, t.term, t.alt, t.romaji].some((s) => s.toLowerCase() === q) || readingH === kana) rank = 0;
+      else if ([t.en, t.term, t.romaji].some((s) => s.toLowerCase().startsWith(q))) rank = 1;
+      else if (has(t.definition) && !nameHit) rank = 3;
+      return { t, rank };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.rank - b.rank)
+    .map((x) => x.t);
+}
+
+function localExport() {
+  const clean = (s) => String(s).replace(/[\t\r\n]+/g, ' ');
+  const body = localFilter(apiParams()).map((r) => {
+    const front = r.reading && r.reading !== r.term ? `${r.term}[${r.reading}]` : r.term;
+    const back = `${r.en}${r.abbr ? ` (${r.abbr})` : ''}<br>${r.definition}`;
+    return [front, back, `level${r.level} ${r.category}`].map(clean).join('\t');
+  }).join('\n');
+  const blob = new Blob([`#separator:tab\n#html:true\n#tags column:3\n${body}\n`], { type: 'text/tab-separated-values' });
+  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `reg-glossary-${state.lang}.tsv` });
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+async function fetchTerms(p) {
+  if (!local) return getJson(`api/terms?${p}`);
+  const all = localFilter(p);
+  const offset = Number(p.get('offset')) || 0;
+  return { total: all.length, results: all.slice(offset, offset + (Number(p.get('limit')) || PAGE)) };
+}
+
+async function fetchRandom() {
+  if (!local) return getJson(`api/random?lang=${state.lang}`);
+  const rows = local.terms[state.lang];
+  return rows[Math.floor(Math.random() * rows.length)];
+}
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -77,7 +139,7 @@ function renderFilters() {
   $('cats').innerHTML = meta.categories.map((c) =>
     `<li><button data-cat="${esc(c.id)}" aria-pressed="${c.id === state.cat}"><span>${esc(c.name)}</span><span class="n">${c.count}</span></button></li>`
   ).join('');
-  $('export').href = `/api/export.tsv?${apiParams()}`;
+  $('export').href = `api/export.tsv?${apiParams()}`;
 }
 
 function renderLang() {
@@ -97,9 +159,7 @@ async function load(append = false) {
   p.set('offset', state.offset);
   let data;
   try {
-    const res = await fetch(`/api/terms?${p}`);
-    if (!res.ok) throw new Error((await res.json()).error || res.statusText);
-    data = await res.json();
+    data = await fetchTerms(p);
   } catch (err) {
     if (id !== requestId) return;
     $('heading').textContent = '';
@@ -152,10 +212,12 @@ document.addEventListener('click', (e) => {
   if (!e.target.closest('.lang')) toggleMenu(false);
 });
 
+$('export').addEventListener('click', (e) => { if (local) { e.preventDefault(); localExport(); } });
+
 $('more').addEventListener('click', () => { state.offset += PAGE; load(true); });
 
 $('random').addEventListener('click', async () => {
-  const t = await (await fetch(`/api/random?lang=${state.lang}`)).json();
+  const t = await fetchRandom();
   Object.assign(state, { q: t.en, level: '', cat: '' });
   update();
   window.scrollTo({ top: 0 });
@@ -183,7 +245,13 @@ window.addEventListener('popstate', () => { readUrl(); $('q').value = state.q; l
 // ── Boot ──
 (async () => {
   readUrl();
-  meta = await (await fetch('/api/meta')).json();
+  try {
+    meta = await getJson('api/meta');
+  } catch {
+    // No backend (e.g. GitHub Pages): fall back to the bundled dataset.
+    local = await getJson('data.json');
+    meta = local.meta;
+  }
   if (!meta.languages.some((l) => l.code === state.lang && l.enabled)) state.lang = 'ja';
   $('q').value = state.q;
   renderLang();
