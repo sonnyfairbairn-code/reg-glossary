@@ -3,6 +3,9 @@
 // Levels: 1 = Foundations (school science), 2 = Pharmaceutical science, 3 = Regulatory affairs
 // To add a language: enable it in `languages` and add its key to each row's translation object.
 
+const elements = require('./elements');
+const reactions = require('./reactions');
+
 const languages = [
   { code: 'ja', name: 'Japanese', native: '日本語', enabled: 1 },
   { code: 'zh', name: 'Chinese', native: '中文', enabled: 0 },
@@ -11,14 +14,16 @@ const languages = [
 ];
 
 const levels = [
-  { id: 1, name: 'Foundations', blurb: 'School chemistry and biology' },
-  { id: 2, name: 'Pharmaceutical science', blurb: 'Formulation and pharmacology' },
+  { id: 1, name: 'Foundations', blurb: 'School chemistry, the elements and biology' },
+  { id: 2, name: 'Pharmaceutical science', blurb: 'Organic reactions, formulation and pharmacology' },
   { id: 3, name: 'Regulatory affairs', blurb: 'Approval, quality, clinical and safety' },
 ];
 
 const categories = {
   chemistry: 'Chemistry',
+  elements: 'Elements',
   biology: 'Biology',
+  reactions: 'Reactions & mechanisms',
   pharmacology: 'Pharmacology',
   formulation: 'Formulation',
   regulatory: 'Regulatory',
@@ -73,6 +78,9 @@ const terms = [
   ['isomer', '', 'chemistry', 1, 'Compounds with the same formula but different structures.', j('異性体', 'いせいたい')],
   ['polymer', '', 'chemistry', 1, 'A large molecule built from many repeating units.', j('高分子', 'こうぶんし', 'ポリマー')],
 
+  // ───────── Level 1: Elements (all 118) ─────────
+  ...elements,
+
   // ───────── Level 1: Biology ─────────
   ['cell', '', 'biology', 1, 'The basic structural and functional unit of living things.', j('細胞', 'さいぼう')],
   ['cell membrane', '', 'biology', 1, 'The lipid barrier that surrounds a cell and controls what enters and leaves.', j('細胞膜', 'さいぼうまく')],
@@ -106,6 +114,9 @@ const terms = [
   ['liver', '', 'biology', 1, 'The organ that is the main site of drug metabolism.', j('肝臓', 'かんぞう')],
   ['kidney', '', 'biology', 1, 'The organ that filters blood and excretes many drugs.', j('腎臓', 'じんぞう')],
   ['nervous system', '', 'biology', 1, 'The network of nerves, brain and spinal cord.', j('神経系', 'しんけいけい')],
+
+  // ───────── Level 2: Reactions and mechanisms ─────────
+  ...reactions,
 
   // ───────── Level 2: Pharmacology ─────────
   ['pharmacokinetics', 'PK', 'pharmacology', 2, 'What the body does to a drug: absorption, distribution, metabolism and excretion.', j('薬物動態', 'やくぶつどうたい')],

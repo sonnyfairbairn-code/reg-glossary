@@ -22,6 +22,8 @@ test('romaji conversion', () => {
   assert.equal(toRomaji('やっきょくほう'), 'yakkyokuhou');
   assert.equal(toRomaji('ワクチン'), 'wakuchin');
   assert.equal(toRomaji('ちゅうしゃざい'), 'chuushazai');
+  assert.equal(toRomaji('ウィッティヒ'), 'wittihi');
+  assert.equal(toRomaji('フィッシャーエステルか'), 'fisshaaesuteruka');
 });
 
 test('data has unique terms, valid categories and kana-only readings', () => {
@@ -48,6 +50,12 @@ test('search works in English, kanji, kana, katakana and romaji', async () => {
   }
   const kata = await get(`/api/terms?q=${encodeURIComponent('ゲンヤク')}`);
   assert.equal(kata.body.results[0].slug, 'drug-substance');
+  for (const [q, slug] of [['Fe', 'iron'], ['ニホニウム', 'nihonium'], ['gabriel', 'gabriel-synthesis'], ['フィッシャーエステル化', 'fischer-esterification'], ['sn2', 'sn2-reaction']]) {
+    const { body } = await get(`/api/terms?q=${encodeURIComponent(q)}`);
+    assert.equal(body.results[0].slug, slug, q);
+  }
+  const elements = await get('/api/terms?category=elements&limit=1');
+  assert.equal(elements.body.total, 118);
   const abbr = await get('/api/terms?q=gmp');
   assert.equal(abbr.body.results[0].abbr, 'GMP');
 });

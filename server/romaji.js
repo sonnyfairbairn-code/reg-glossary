@@ -42,7 +42,7 @@ function toRomaji(kana) {
       i++;
     } else if (BASE[c] && SMALL_V[next] && !SMALL_V[c]) {
       const b = BASE[c];
-      syl = (b === 'fu' ? 'f' : b === 'vu' ? 'v' : b.slice(0, -1)) + SMALL_V[next];
+      syl = (b === 'fu' ? 'f' : b === 'vu' ? 'v' : b === 'u' ? 'w' : b.slice(0, -1)) + SMALL_V[next];
       i++;
     } else if (BASE[c]) {
       syl = BASE[c];

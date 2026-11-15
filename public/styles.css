@@ -127,3 +127,5 @@ mark { background: var(--pink-soft); color: inherit; border-radius: 2px; padding
   .entry { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .search input { font-size: 18px; }
 }
+
+[hidden] { display: none !important; }

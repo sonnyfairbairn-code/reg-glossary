@@ -10,8 +10,8 @@ This glossary builds that vocabulary in three levels, so a learner moves from sc
 
 | Level | Scope | Terms |
 |---|---|---|
-| 1. Foundations | School chemistry and biology | 72 |
-| 2. Pharmaceutical science | Pharmacology and formulation | 42 |
+| 1. Foundations | School chemistry, all 118 elements, biology | 190 |
+| 2. Pharmaceutical science | Organic reactions and mechanisms, pharmacology, formulation | 141 |
 | 3. Regulatory affairs | Approval, quality/GMP, clinical, safety/PV, agencies and law | 92 |
 
 ## Features
@@ -76,6 +76,8 @@ In the repo on GitHub: Settings → Pages → Deploy from a branch → `main` an
 ```
 server/
   data/terms.js   Source of truth for all terms, languages and categories
+  data/elements.js  The 118 elements
+  data/reactions.js Reaction types, mechanisms and named reactions
   db.js           SQLite schema and seeding
   romaji.js       Kana to romaji converter (enables romaji search)
   app.js          Express API
