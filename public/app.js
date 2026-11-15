@@ -136,7 +136,9 @@ function renderFilters() {
     meta.levels.map((l) =>
       `<button data-level="${l.id}" aria-pressed="${String(l.id) === state.level}" title="${esc(l.blurb)}">${esc(l.name)}<span class="n">${l.count}</span></button>`
     ).join('');
-  $('cats').innerHTML = meta.categories.map((c) =>
+  $('cats').innerHTML =
+    `<li><button data-cat="" aria-pressed="${!state.cat}"><span>All</span><span class="n">${meta.total}</span></button></li>` +
+    meta.categories.map((c) =>
     `<li><button data-cat="${esc(c.id)}" aria-pressed="${c.id === state.cat}"><span>${esc(c.name)}</span><span class="n">${c.count}</span></button></li>`
   ).join('');
   $('export').href = `api/export.tsv?${apiParams()}`;
