@@ -1,4 +1,4 @@
-# Yakuji — Bilingual Regulatory Glossary (EN/JP)
+# Sxlvery — Bilingual Regulatory Glossary (EN/JP)
 
 A searchable glossary that links English and Japanese terms used in pharmaceutical regulatory affairs.
 

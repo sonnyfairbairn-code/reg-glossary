@@ -34,7 +34,7 @@ a { color: var(--pink); }
 .top { background: #17171a; color: #fff; }
 .top-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
 .logo { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; }
-.logo-mark { background: #e8457f; color: #17171a; font: 700 18px/1 var(--jp); padding: 8px 7px; border-radius: 4px; }
+.logo-mark { background: #e8457f; color: #17171a; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 4px; }
 .logo-text { font-weight: 700; font-size: 20px; line-height: 1.05; letter-spacing: .01em; }
 .logo-text small { display: block; font-weight: 400; font-size: 11px; color: #b9b9c0; letter-spacing: .04em; }
 
