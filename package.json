@@ -1,0 +1,13 @@
+{
+  "name": "reg-glossary",
+  "version": "0.1.0",
+  "description": "Bilingual regulatory affairs glossary (EN/JP) spanning school science to pharmaceutical regulation",
+  "private": true,
+  "scripts": {
+    "start": "node server/index.js",
+    "seed": "node server/seed.js",
+    "test": "node --test server/api.test.js"
+  },
+  "engines": { "node": ">=22.5" },
+  "dependencies": { "express": "^4.21.2" }
+}

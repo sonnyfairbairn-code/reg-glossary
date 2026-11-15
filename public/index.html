@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Yakuji — Regulatory Glossary</title>
+  <meta name="description" content="Bilingual regulatory affairs glossary, from school science to pharmaceutical regulation.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-inner">
+      <a class="logo" href="/" aria-label="Yakuji glossary home">
+        <span class="logo-mark" lang="ja">薬事</span>
+        <span class="logo-text">yakuji<small>regulatory glossary</small></span>
+      </a>
+      <div class="lang">
+        <button id="langBtn" class="lang-btn" aria-haspopup="listbox" aria-expanded="false">
+          <span>EN</span><span class="swap" aria-hidden="true">⇄</span><span id="langCurrent">日本語</span><span class="caret" aria-hidden="true">▾</span>
+        </button>
+        <ul id="langMenu" class="lang-menu" role="listbox" hidden></ul>
+      </div>
+    </div>
+  </header>
+
+  <section class="search-band">
+    <div class="wrap">
+      <form id="searchForm" class="search" role="search">
+        <input id="q" type="search" name="q" autocomplete="off" spellcheck="false"
+               placeholder="English, 日本語, かな or romaji" aria-label="Search the glossary">
+        <button type="submit" aria-label="Search">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        </button>
+      </form>
+      <p class="hint">Try <a href="?q=GMP">GMP</a>, <a href="?q=審査">審査</a>, <a href="?q=ちけん">ちけん</a> or <a href="?q=fukusayou">fukusayou</a></p>
+      <nav id="levels" class="levels" aria-label="Level"></nav>
+    </div>
+  </section>
+
+  <main class="wrap layout">
+    <section class="results">
+      <h1 id="heading" class="heading"></h1>
+      <div id="list"></div>
+      <button id="more" class="more" hidden>More terms</button>
+    </section>
+
+    <aside class="side">
+      <h2>Categories</h2>
+      <ul id="cats" class="cats"></ul>
+      <h2>Study</h2>
+      <a id="export" class="side-btn" href="/api/export.tsv">Export to Anki (.tsv)</a>
+      <button id="random" class="side-btn ghost">Random term</button>
+      <p class="fine">Educational resource. Not for regulatory decisions. Check official sources such as the PMDA and MHLW before relying on a term.</p>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
