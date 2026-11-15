@@ -8,7 +8,7 @@ const reactions = require('./reactions');
 
 const languages = [
   { code: 'ja', name: 'Japanese', native: '日本語', enabled: 1 },
-  { code: 'zh', name: 'Chinese', native: '中文', enabled: 0 },
+  { code: 'fr', name: 'French', native: 'Français', enabled: 0 },
   { code: 'ko', name: 'Korean', native: '한국어', enabled: 0 },
   { code: 'de', name: 'German', native: 'Deutsch', enabled: 0 },
 ];

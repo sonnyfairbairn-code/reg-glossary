@@ -98,7 +98,7 @@ Add a row to `server/data/terms.js`:
 ## Add a language
 
 1. In `server/data/terms.js`, set the language's `enabled` to `1` (or add a new entry to `languages`).
-2. Add that language's key to each term's translation object, e.g. `{ ja: [...], zh: ['原子', 'yuánzǐ'] }`.
+2. Add that language's key to each term's translation object, e.g. `{ ja: [...], fr: ['atome'] }`.
 
 The database, API and toggle pick it up on restart.
 

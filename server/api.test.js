@@ -63,7 +63,7 @@ test('search works in English, kanji, kana, katakana and romaji', async () => {
 test('filters, disabled languages, 404 and export', async () => {
   const { body } = await get('/api/terms?level=1&category=biology&limit=100');
   assert.ok(body.total > 0 && body.results.every((r) => r.level === 1 && r.category === 'biology'));
-  assert.equal((await get('/api/terms?lang=zh')).status, 400);
+  assert.equal((await get('/api/terms?lang=fr')).status, 400);
   assert.equal((await get('/api/terms/nope')).status, 404);
   const tsv = await get('/api/export.tsv?level=3');
   assert.match(tsv.body, /審査報告書\[しんさほうこくしょ\]\treview report/);
